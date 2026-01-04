@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Property Details</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="detail-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.history.back()">
+            <span>←</span>
+        </button>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="property-detail" id="propertyDetail">
+        <!-- Image Carousel -->
+        <div class="image-carousel">
+            <div class="carousel-container" id="carouselContainer">
+                <!-- Images will be loaded here -->
+            </div>
+            <button class="carousel-btn prev" id="prevBtn">‹</button>
+            <button class="carousel-btn next" id="nextBtn">›</button>
+            <div class="carousel-dots" id="carouselDots"></div>
+        </div>
+
+        <!-- Property Info -->
+        <div class="property-info">
+            <div class="property-header">
+                <div>
+                    <h1 id="propertyTitle">Property Name</h1>
+                    <p class="property-location" id="propertyLocation">📍 Location</p>
+                </div>
+                <div class="property-price" id="propertyPrice">$500/month</div>
+            </div>
+
+            <div class="property-badges" id="propertyBadges">
+                <!-- Badges will be added here -->
+            </div>
+
+            <!-- Overview -->
+            <div class="property-section">
+                <h3 data-en="Overview" data-vi="Tổng quan">Overview</h3>
+                <p id="propertyOverview">Property description will appear here</p>
+            </div>
+
+            <!-- Amenities -->
+            <div class="property-section">
+                <h3 data-en="Amenities" data-vi="Tiện nghi">Amenities</h3>
+                <div class="amenities-grid" id="amenitiesGrid">
+                    <!-- Amenities will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Property Details -->
+            <div class="property-section">
+                <h3 data-en="Property Details" data-vi="Chi tiết phòng">Property Details</h3>
+                <div class="details-grid" id="detailsGrid">
+                    <!-- Details will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Contact -->
+            <div class="property-actions">
+                <button class="btn-secondary" onclick="window.history.back()" data-en="Back" data-vi="Quay lại">Back</button>
+                <button class="btn-primary" onclick="contactOwner()" data-en="Contact Owner" data-vi="Liên hệ chủ nhà">Contact Owner</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script src="app.js"></script>
+    <script>
+        let currentImageIndex = 0;
+        let propertyData = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Get property ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('id');
+            
+            if (propertyId) {
+                loadPropertyDetail(propertyId);
+            } else {
+                alert('Property not found');
+                window.history.back();
+            }
+        });
+
+        function loadPropertyDetail(id) {
+            const properties = StorageManager.getProperties();
+            propertyData = properties.find(p => p.id === parseInt(id));
+            
+            if (!propertyData) {
+                alert('Property not found');
+                window.history.back();
+                return;
+            }
+
+            // Load images
+            const carouselContainer = document.getElementById('carouselContainer');
+            carouselContainer.innerHTML = propertyData.images.map((img, index) => 
+                `<img src="${img}" alt="${propertyData.title}" class="${index === 0 ? 'active' : ''}">`
+            ).join('');
+
+            // Load dots
+            const dotsContainer = document.getElementById('carouselDots');
+            dotsContainer.innerHTML = propertyData.images.map((_, index) =>
+                `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToImage(${index})"></span>`
+            ).join('');
+
+            // Load property info
+            document.getElementById('propertyTitle').textContent = propertyData.title;
+            document.getElementById('propertyLocation').textContent = `📍 ${propertyData.location}`;
+            document.getElementById('propertyPrice').textContent = propertyData.price;
+            document.getElementById('propertyOverview').textContent = propertyData.description;
+
+            // Load badges
+            const badgesContainer = document.getElementById('propertyBadges');
+            let badges = [];
+            if (propertyData.verified) badges.push('<span class="badge badge-verified">✓ Verified</span>');
+            if (propertyData.partnership) badges.push('<span class="badge badge-partner">⭐ Partner</span>');
+            badgesContainer.innerHTML = badges.join('');
+
+            // Load amenities
+            const amenitiesGrid = document.getElementById('amenitiesGrid');
+            amenitiesGrid.innerHTML = propertyData.amenities.map(amenity =>
+                `<div class="amenity-item">
+                    <span>${amenity.icon}</span>
+                    <span>${amenity.name}</span>
+                </div>`
+            ).join('');
+
+            // Load details
+            const detailsGrid = document.getElementById('detailsGrid');
+            detailsGrid.innerHTML = `
+                <div class="detail-item"><strong data-en="Area" data-vi="Diện tích">Area</strong><span>${propertyData.area}</span></div>
+                <div class="detail-item"><strong data-en="Bedrooms" data-vi="Phòng ngủ">Bedrooms</strong><span>${propertyData.bedrooms}</span></div>
+                <div class="detail-item"><strong data-en="Bathrooms" data-vi="Phòng tắm">Bathrooms</strong><span>${propertyData.bathrooms}</span></div>
+                <div class="detail-item"><strong data-en="Available" data-vi="Còn trống">Available</strong><span>${propertyData.available}</span></div>
+            `;
+
+            updateLanguage();
+        }
+
+        // Carousel controls
+        document.getElementById('prevBtn')?.addEventListener('click', () => {
+            if (propertyData) {
+                currentImageIndex = (currentImageIndex - 1 + propertyData.images.length) % propertyData.images.length;
+                updateCarousel();
+            }
+        });
+
+        document.getElementById('nextBtn')?.addEventListener('click', () => {
+            if (propertyData) {
+                currentImageIndex = (currentImageIndex + 1) % propertyData.images.length;
+                updateCarousel();
+            }
+        });
+
+        function goToImage(index) {
+            currentImageIndex = index;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const images = document.querySelectorAll('.carousel-container img');
+            const dots = document.querySelectorAll('.dot');
+            
+            images.forEach((img, i) => {
+                img.classList.toggle('active', i === currentImageIndex);
+            });
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentImageIndex);
+            });
+        }
+
+        function contactOwner() {
+            const user = StorageManager.getCurrentUser();
+            const lang = StorageManager.getCurrentLanguage();
+            const message = lang === 'vi' 
+                ? `Xin chào! Tôi quan tâm đến phòng: ${propertyData.title}`
+                : `Hello! I'm interested in: ${propertyData.title}`;
+            
+            // Redirect to messages with pre-filled message
+            window.location.href = `messages.html?property=${propertyData.id}&message=${encodeURIComponent(message)}`;
+        }
+    </script>
+</body>
+</html>

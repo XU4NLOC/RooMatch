@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Home</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="home-page">
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="logo-small">
+                <img src="logo.png" alt="RooMatch Logo" class="logo-nav-img">
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="location-lang">
+                <select id="locationSelect" class="location-select">
+                    <option value="hcmc">Ho Chi Minh City</option>
+                    <option value="hanoi">Hanoi</option>
+                    <option value="danang">Da Nang</option>
+                </select>
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="vi">VI</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Search Bar -->
+        <div class="search-section">
+            <input type="text" id="searchInput" class="search-bar"
+                   data-en="Search for rooms, apartments, houses..."
+                   data-vi="Tìm kiếm phòng, căn hộ, nhà..."
+                   placeholder="Search for rooms, apartments, houses...">
+        </div>
+
+        <!-- Categories -->
+        <div class="categories">
+            <button class="category-btn active" data-category="all" data-en="All" data-vi="Tất cả">All</button>
+            <button class="category-btn" data-category="apartment" data-en="Apartments" data-vi="Căn hộ">Apartments</button>
+            <button class="category-btn" data-category="house" data-en="Houses" data-vi="Nhà">Houses</button>
+            <button class="category-btn" data-category="office" data-en="Offices" data-vi="Văn phòng">Offices</button>
+            <button class="category-btn" data-category="roommate" data-en="Roommates" data-vi="Bạn cùng phòng">Roommates</button>
+        </div>
+
+        <!-- Property Listings -->
+        <div class="property-grid" id="propertyGrid">
+            <!-- Properties will be loaded here dynamically -->
+        </div>
+
+        <!-- Swipe Button -->
+        <button class="btn-swipe" onclick="window.location.href='property-swipe.html'">
+            <span>💫</span>
+            <span data-en="Swipe Mode" data-vi="Chế độ vuốt">Swipe Mode</span>
+        </button>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span data-en="Home" data-vi="Trang chủ">Home</span>
+        </a>
+        <a href="property-swipe.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span data-en="Swipe" data-vi="Vuốt">Swipe</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span data-en="Notifications" data-vi="Thông báo">Notifications</span>
+        </a>
+        <a href="messages.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            <span data-en="Messages" data-vi="Tin nhắn">Messages</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span data-en="Profile" data-vi="Hồ sơ">Profile</span>
+        </a>
+    </nav>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Check authentication
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+            }
+
+            // Load properties
+            loadProperties();
+
+            // Setup category filters
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    filterProperties(btn.dataset.category);
+                });
+            });
+
+            // Setup search
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                searchProperties(e.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

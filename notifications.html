@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Notifications</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="notifications-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.history.back()">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="Notifications" data-vi="Thông báo">Notifications</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-bottom: 80px;">
+        <div class="notifications-list" id="notificationsList">
+            <!-- Notifications will be loaded here -->
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span data-en="Home" data-vi="Trang chủ">Home</span>
+        </a>
+        <a href="property-swipe.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span data-en="Swipe" data-vi="Vuốt">Swipe</span>
+        </a>
+        <a href="notifications.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span data-en="Notifications" data-vi="Thông báo">Notifications</span>
+        </a>
+        <a href="messages.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            <span data-en="Messages" data-vi="Tin nhắn">Messages</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span data-en="Profile" data-vi="Hồ sơ">Profile</span>
+        </a>
+    </nav>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            loadNotifications();
+        });
+
+        function loadNotifications() {
+            const notifications = StorageManager.getNotifications();
+            const container = document.getElementById('notificationsList');
+            
+            if (notifications.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #666;">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="margin-bottom: 16px;">
+                            <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+                        </svg>
+                        <p style="font-size: 1.1rem;" data-en="No notifications yet" data-vi="Chưa có thông báo">No notifications yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = notifications.map(notif => createNotificationCard(notif)).join('');
+            
+            // Add click listeners
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = parseInt(item.dataset.id);
+                    handleNotificationClick(id);
+                });
+            });
+
+            updateLanguage();
+        }
+
+        function createNotificationCard(notif) {
+            const icons = {
+                message: '💬',
+                application: '📋',
+                like: '❤️',
+                boost: '🚀',
+                system: 'ℹ️'
+            };
+
+            const unreadStyle = !notif.read ? 'background: #fef3c7;' : '';
+            const unreadDot = !notif.read ? '<div style="width: 8px; height: 8px; background: #C40817; border-radius: 50%;"></div>' : '';
+
+            return `
+                <div class="notification-item" data-id="${notif.id}" style="background: white; border-radius: 12px; padding: 16px; margin-bottom: 12px; cursor: pointer; transition: all 0.3s ease; ${unreadStyle}" onmouseover="this.style.boxShadow='0 4px 8px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow='0 2px 4px rgba(0,0,0,0.05)'">
+                    <div style="display: flex; align-items: start; gap: 12px;">
+                        <div style="font-size: 2rem;">${icons[notif.type] || icons.system}</div>
+                        <div style="flex: 1;">
+                            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 4px;">
+                                <h3 style="margin: 0; color: #340307; font-size: 1rem;">${notif.title}</h3>
+                                ${unreadDot}
+                            </div>
+                            <p style="margin: 0; color: #666; font-size: 0.9rem; margin-bottom: 4px;">${notif.message}</p>
+                            <span style="color: #999; font-size: 0.85rem;">${notif.time}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function handleNotificationClick(id) {
+            // Mark as read
+            StorageManager.markNotificationAsRead(id);
+            
+            const notifications = StorageManager.getNotifications();
+            const notif = notifications.find(n => n.id === id);
+            
+            if (!notif) return;
+
+            // Navigate based on notification type
+            switch (notif.type) {
+                case 'message':
+                    window.location.href = 'messages.html';
+                    break;
+                case 'application':
+                    window.location.href = 'broker-progress.html';
+                    break;
+                case 'like':
+                    window.location.href = 'broker-progress.html';
+                    break;
+                case 'boost':
+                    window.location.href = 'boost.html';
+                    break;
+                default:
+                    loadNotifications();
+            }
+        }
+    </script>
+</body>
+</html>

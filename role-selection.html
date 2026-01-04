@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Choose Your Role</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="role-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="handleLogout()">
+            <span>←</span>
+        </button>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="role-container">
+            <h1 class="role-title" data-en="Who You Are?" data-vi="Bạn là ai?">Who You Are?</h1>
+
+            <div class="role-cards">
+                <!-- Seeker Card -->
+                <div class="role-card" data-role="seeker">
+                    <div class="role-icon">
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                            <path d="M40,10 L50,25 L55,25 L55,40 L60,40 L60,60 L20,60 L20,40 L25,40 L25,25 L30,25 Z" fill="#8E1D22" opacity="0.2"/>
+                            <path d="M40,10 L50,25 L55,25 L55,40 L60,40 L60,60 L20,60 L20,40 L25,40 L25,25 L30,25 Z" fill="none" stroke="#8E1D22" stroke-width="2"/>
+                            <text x="40" y="45" text-anchor="middle" font-size="24" fill="#8E1D22">🏠</text>
+                        </svg>
+                    </div>
+                    <h2 data-en="Seeker" data-vi="Người cho thuê">Seeker</h2>
+                    <p class="role-description" data-en="I am a landlord or broker looking to rent out rooms or find tenants" data-vi="Tôi là chủ nhà hoặc môi giới muốn cho thuê phòng hoặc tìm người thuê">
+                        I am a landlord or broker looking to rent out rooms or find tenants
+                    </p>
+                    <button class="btn-select" onclick="selectRole('seeker')" data-en="Select" data-vi="Chọn">Select</button>
+                </div>
+
+                <!-- Matcher Card -->
+                <div class="role-card" data-role="matcher">
+                    <div class="role-icon">
+                        <svg width="80" height="80" viewBox="0 0 80 80">
+                            <circle cx="40" cy="30" r="12" fill="#C40817" opacity="0.2"/>
+                            <circle cx="40" cy="30" r="12" fill="none" stroke="#C40817" stroke-width="2"/>
+                            <path d="M25,50 Q25,42 40,42 Q55,42 55,50 L55,65 L25,65 Z" fill="#C40817" opacity="0.2"/>
+                            <path d="M25,50 Q25,42 40,42 Q55,42 55,50 L55,65 L25,65 Z" fill="none" stroke="#C40817" stroke-width="2"/>
+                            <text x="40" y="38" text-anchor="middle" font-size="24" fill="#C40817">🔍</text>
+                        </svg>
+                    </div>
+                    <h2 data-en="Matcher" data-vi="Người tìm trọ">Matcher</h2>
+                    <p class="role-description" data-en="I am looking for a room or roommate to live with" data-vi="Tôi đang tìm phòng hoặc bạn cùng phòng để ở cùng">
+                        I am looking for a room or roommate to live with
+                    </p>
+                    <button class="btn-select" onclick="selectRole('matcher')" data-en="Select" data-vi="Chọn">Select</button>
+                </div>
+            </div>
+
+            <!-- Brand Description -->
+            <div class="brand-description">
+                <h3 data-en="About RooMatch" data-vi="Về RooMatch">About RooMatch</h3>
+                <p data-en="RooMatch connects RMIT students exclusively with each other, helping them find rooms and roommates in a familiar and secure environment within the RMIT community." 
+                   data-vi="RooMatch kết nối sinh viên RMIT với nhau, giúp họ tìm phòng và bạn cùng phòng trong môi trường quen thuộc và an toàn trong cộng đồng RMIT.">
+                    RooMatch connects RMIT students exclusively with each other, helping them find rooms and roommates in a familiar and secure environment within the RMIT community.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        function handleLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                StorageManager.clearUser();
+                window.location.href = 'index.html';
+            }
+        }
+
+        function selectRole(role) {
+            const user = StorageManager.getCurrentUser();
+            if (user) {
+                user.role = role;
+                StorageManager.saveCurrentUser(user);
+                window.location.href = 'home.html';
+            }
+        }
+
+        // Check if user is logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>

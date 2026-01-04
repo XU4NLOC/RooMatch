@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Register</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="register-page">
+    <div class="container">
+        <div class="register-container">
+
+            <div class="auth-brand">
+                 <!-- Logo -->
+                <div class="logo-section">
+                    <div class="logo-small">
+                        <img src="logo.png" alt="RooMatch Logo" class="logo-img-small">
+                    </div>
+                     <!-- Added slogan here to balance the look if needed -->
+                     <p class="slogan" data-en="GOOD MATCHING, GOOD LIVING" data-vi="GHÉP ĐÔI TỐT, SỐNG TỐT">GOOD MATCHING, GOOD LIVING</p>
+                </div>
+            </div>
+
+            <div class="auth-content">
+                <div class="auth-header">
+                     <!-- Back Button -->
+                    <button class="btn-back" onclick="window.location.href='index.html'">
+                        <span>←</span>
+                    </button>
+                    <!-- Language Toggle -->
+                    <div class="language-toggle">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="vi">VI</button>
+                    </div>
+                </div>
+
+                <!-- Register Form -->
+                <form id="registerForm" class="auth-form">
+                    <h2 data-en="Create Account" data-vi="Tạo tài khoản">Create Account</h2>
+
+                    <div class="form-group">
+                        <label for="fullName" data-en="Full Name" data-vi="Họ và tên">Full Name</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" data-en="Email" data-vi="Email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone" data-en="Phone Number" data-vi="Số điện thoại">Phone Number</label>
+                        <input type="tel" id="regPhone" placeholder="+84" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPassword" data-en="Password" data-vi="Mật khẩu">Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" data-en="Confirm Password" data-vi="Xác nhận mật khẩu">Confirm Password</label>
+                        <input type="password" id="confirmPassword" required>
+                    </div>
+
+                    <button type="submit" class="btn-primary" data-en="Register" data-vi="Đăng ký">Register</button>
+
+                    <div class="divider">
+                        <span data-en="OR" data-vi="HOẶC">OR</span>
+                    </div>
+
+                    <div class="social-login">
+                        <button type="button" class="btn-social btn-facebook">
+                            <span data-en="Continue with Facebook" data-vi="Tiếp tục với Facebook">Continue with Facebook</span>
+                        </button>
+                        <button type="button" class="btn-social btn-google">
+                            <span data-en="Continue with Google" data-vi="Tiếp tục với Google">Continue with Google</span>
+                        </button>
+                    </div>
+
+                    <p class="switch-auth">
+                        <span data-en="Already have an account?" data-vi="Đã có tài khoản?">Already have an account?</span>
+                        <a href="index.html" data-en="Login" data-vi="Đăng nhập">Login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script src="auth.js"></script>
+</body>
+</html>

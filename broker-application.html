@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Submit Property</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="application-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.history.back()">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="Submit Property" data-vi="Đăng phòng">Submit Property</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form id="applicationForm" class="application-form">
+            <!-- Personal Information -->
+            <div class="form-section">
+                <h3 data-en="Personal Information" data-vi="Thông tin cá nhân">Personal Information</h3>
+                
+                <div class="form-group">
+                    <label for="fullName" data-en="Full Name *" data-vi="Họ và tên *">Full Name *</label>
+                    <input type="text" id="fullName" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="idCard" data-en="ID Card Number *" data-vi="Số CMND/CCCD *">ID Card Number *</label>
+                        <input type="text" id="idCard" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" data-en="Phone Number *" data-vi="Số điện thoại *">Phone Number *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" data-en="Email *" data-vi="Email *">Email *</label>
+                    <input type="email" id="email" required>
+                </div>
+            </div>
+
+            <!-- Property Information -->
+            <div class="form-section">
+                <h3 data-en="Property Information" data-vi="Thông tin phòng">Property Information</h3>
+                
+                <div class="form-group">
+                    <label for="propertyType" data-en="Property Type *" data-vi="Loại phòng *">Property Type *</label>
+                    <select id="propertyType" required>
+                        <option value="">Select type</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="house">House</option>
+                        <option value="office">Office</option>
+                        <option value="roommate">Roommate</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="propertyName" data-en="Property Name *" data-vi="Tên phòng *">Property Name *</label>
+                    <input type="text" id="propertyName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address" data-en="Address *" data-vi="Địa chỉ *">Address *</label>
+                    <input type="text" id="address" required>
+                </div>
+            </div>
+
+            <!-- Property Details -->
+            <div class="form-section">
+                <h3 data-en="Property Details" data-vi="Chi tiết phòng">Property Details</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="area" data-en="Area (m²) *" data-vi="Diện tích (m²) *">Area (m²) *</label>
+                        <input type="number" id="area" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bedrooms" data-en="Bedrooms *" data-vi="Phòng ngủ *">Bedrooms *</label>
+                        <input type="number" id="bedrooms" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="bathrooms" data-en="Bathrooms *" data-vi="Phòng tắm *">Bathrooms *</label>
+                        <input type="number" id="bathrooms" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="capacity" data-en="Max Capacity *" data-vi="Số người tối đa *">Max Capacity *</label>
+                        <input type="number" id="capacity" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="furnished" data-en="Furnished Status *" data-vi="Tình trạng nội thất *">Furnished Status *</label>
+                    <select id="furnished" required>
+                        <option value="">Select status</option>
+                        <option value="fully">Fully Furnished</option>
+                        <option value="partial">Partially Furnished</option>
+                        <option value="unfurnished">Unfurnished</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="legalDocs" data-en="Legal Documents *" data-vi="Giấy tờ pháp lý *">Legal Documents *</label>
+                    <select id="legalDocs" required>
+                        <option value="">Select document</option>
+                        <option value="ownership">Ownership Certificate</option>
+                        <option value="lease">Lease Agreement</option>
+                        <option value="sublease">Sublease Permission</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="price" data-en="Monthly Price ($) *" data-vi="Giá thuê hàng tháng ($) *">Monthly Price ($) *</label>
+                    <input type="number" id="price" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description" data-en="Description *" data-vi="Mô tả *">Description *</label>
+                    <textarea id="description" rows="5" required></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width: 100%; padding: 16px;" data-en="Submit Application" data-vi="Gửi đơn đăng ký">Submit Application</button>
+        </form>
+    </div>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Pre-fill user data
+            document.getElementById('fullName').value = user.name || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('email').value = user.email || '';
+
+            // Handle form submission
+            document.getElementById('applicationForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    idCard: document.getElementById('idCard').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    propertyType: document.getElementById('propertyType').value,
+                    propertyName: document.getElementById('propertyName').value,
+                    address: document.getElementById('address').value,
+                    area: document.getElementById('area').value,
+                    bedrooms: document.getElementById('bedrooms').value,
+                    bathrooms: document.getElementById('bathrooms').value,
+                    capacity: document.getElementById('capacity').value,
+                    furnished: document.getElementById('furnished').value,
+                    legalDocs: document.getElementById('legalDocs').value,
+                    price: document.getElementById('price').value,
+                    description: document.getElementById('description').value
+                };
+
+                // Save application
+                StorageManager.addApplication(formData);
+
+                const lang = StorageManager.getCurrentLanguage();
+                alert(lang === 'vi' 
+                    ? 'Đơn đăng ký đã được gửi thành công! Vui lòng đợi phê duyệt.'
+                    : 'Application submitted successfully! Please wait for approval.');
+
+                window.location.href = 'broker-progress.html';
+            });
+        });
+    </script>
+</body>
+</html>

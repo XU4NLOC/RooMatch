@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - My Applications</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="progress-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.location.href='profile.html'">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="My Applications" data-vi="Đơn của tôi">My Applications</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="progress-tabs">
+            <button class="tab-btn active" data-status="pending" data-en="Pending" data-vi="Chờ duyệt">Pending</button>
+            <button class="tab-btn" data-status="published" data-en="Published" data-vi="Đã đăng">Published</button>
+            <button class="tab-btn" data-status="past" data-en="Past" data-vi="Đã hết">Past</button>
+        </div>
+
+        <!-- Applications List -->
+        <div class="applications-list" id="applicationsList">
+            <!-- Applications will be loaded here -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" style="display: none; text-align: center; padding: 40px;">
+            <p style="color: #666; font-size: 1.1rem;" data-en="No applications found" data-vi="Không có đơn nào">No applications found</p>
+            <button class="btn-primary" onclick="window.location.href='broker-application.html'" style="margin-top: 20px;" data-en="Submit New Application" data-vi="Đăng phòng mới">Submit New Application</button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 16px; margin-top: 32px;">
+            <button class="btn-secondary" onclick="window.location.href='broker-application.html'" style="flex: 1;" data-en="New Application" data-vi="Đăng mới">New Application</button>
+            <button class="btn-primary" onclick="window.location.href='boost.html'" style="flex: 1;" data-en="Boost Property" data-vi="Đẩy phòng">Boost Property</button>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span data-en="Home" data-vi="Trang chủ">Home</span>
+        </a>
+        <a href="property-swipe.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span data-en="Swipe" data-vi="Vuốt">Swipe</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span data-en="Notifications" data-vi="Thông báo">Notifications</span>
+        </a>
+        <a href="messages.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            <span data-en="Messages" data-vi="Tin nhắn">Messages</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span data-en="Profile" data-vi="Hồ sơ">Profile</span>
+        </a>
+    </nav>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        let currentStatus = 'pending';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            loadApplications();
+
+            // Tab switching
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentStatus = btn.dataset.status;
+                    loadApplications();
+                });
+            });
+        });
+
+        function loadApplications() {
+            const applications = StorageManager.getApplications();
+            const filtered = applications.filter(app => app.status === currentStatus);
+            
+            const listContainer = document.getElementById('applicationsList');
+            const emptyState = document.getElementById('emptyState');
+
+            if (filtered.length === 0) {
+                listContainer.style.display = 'none';
+                emptyState.style.display = 'block';
+            } else {
+                listContainer.style.display = 'grid';
+                emptyState.style.display = 'none';
+                listContainer.innerHTML = filtered.map(app => createApplicationCard(app)).join('');
+                
+                // Add click listeners
+                document.querySelectorAll('.application-item').forEach(item => {
+                    item.addEventListener('click', () => {
+                        const id = item.dataset.id;
+                        viewApplication(id);
+                    });
+                });
+            }
+
+            updateLanguage();
+        }
+
+        function createApplicationCard(app) {
+            const statusClass = `status-${app.status}`;
+            const statusText = {
+                pending: { en: 'Pending Review', vi: 'Chờ duyệt' },
+                published: { en: 'Published', vi: 'Đã đăng' },
+                past: { en: 'Expired', vi: 'Đã hết' }
+            };
+            const lang = StorageManager.getCurrentLanguage();
+            const date = new Date(app.createdAt).toLocaleDateString();
+
+            return `
+                <div class="application-item" data-id="${app.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
+                        <div>
+                            <h3 style="color: #340307; margin-bottom: 4px;">${app.propertyName}</h3>
+                            <p style="color: #666; font-size: 0.9rem;">📍 ${app.address}</p>
+                        </div>
+                        <span class="status-badge ${statusClass}">${statusText[app.status][lang]}</span>
+                    </div>
+                    <div style="display: flex; gap: 16px; color: #666; font-size: 0.9rem;">
+                        <span>🛏️ ${app.bedrooms}</span>
+                        <span>🚿 ${app.bathrooms}</span>
+                        <span>📐 ${app.area} m²</span>
+                        <span>💰 $${app.price}/month</span>
+                    </div>
+                    <p style="color: #999; font-size: 0.85rem; margin-top: 8px;">${date}</p>
+                </div>
+            `;
+        }
+
+        function viewApplication(id) {
+            // In a real app, this would show detailed view
+            const lang = StorageManager.getCurrentLanguage();
+            alert(lang === 'vi' 
+                ? 'Xem chi tiết đơn đăng ký #' + id
+                : 'View application details #' + id);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Messages</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="messages-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="backToMessages()" style="visibility: hidden;" id="backBtn">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="Messages" data-vi="Tin nhắn">Messages</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-bottom: 80px;">
+        <!-- Messages List View -->
+        <div id="messagesList" class="messages-list">
+            <!-- Messages will be loaded here -->
+        </div>
+
+        <!-- Chat View (Hidden by default) -->
+        <div id="chatView" style="display: none;">
+            <div class="chat-header" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="message-avatar" id="chatAvatar">JN</div>
+                    <div>
+                        <h3 id="chatName" style="margin: 0; color: #340307;">John Nguyen</h3>
+                        <p style="margin: 0; color: #666; font-size: 0.85rem;" data-en="Active now" data-vi="Đang hoạt động">Active now</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages" style="background: white; border-radius: 12px; padding: 16px; min-height: 400px; max-height: 500px; overflow-y: auto; margin-bottom: 16px;">
+                <!-- Messages will be loaded here -->
+            </div>
+
+            <div class="chat-input" style="background: white; padding: 16px; border-radius: 12px; display: flex; gap: 12px;">
+                <input type="text" id="messageInput" placeholder="Type a message..." style="flex: 1; padding: 12px; border: 2px solid #f5f5f5; border-radius: 8px; font-size: 1rem;">
+                <button class="btn-primary" onclick="sendMessage()" data-en="Send" data-vi="Gửi">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span data-en="Home" data-vi="Trang chủ">Home</span>
+        </a>
+        <a href="property-swipe.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span data-en="Swipe" data-vi="Vuốt">Swipe</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span data-en="Notifications" data-vi="Thông báo">Notifications</span>
+        </a>
+        <a href="messages.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            <span data-en="Messages" data-vi="Tin nhắn">Messages</span>
+        </a>
+        <a href="profile.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span data-en="Profile" data-vi="Hồ sơ">Profile</span>
+        </a>
+    </nav>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        let currentChatId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Check if coming from property detail with pre-filled message
+            const urlParams = new URLSearchParams(window.location.search);
+            const propertyId = urlParams.get('property');
+            const message = urlParams.get('message');
+            
+            if (propertyId && message) {
+                // Create or open chat with property owner
+                openNewChat(message);
+            } else {
+                loadMessagesList();
+            }
+
+            // Enter key to send message
+            document.getElementById('messageInput')?.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        function loadMessagesList() {
+            const messages = StorageManager.getMessages();
+            const listContainer = document.getElementById('messagesList');
+            
+            listContainer.innerHTML = messages.map(msg => `
+                <div class="message-item ${msg.unread ? 'unread' : ''}" onclick="openChat(${msg.id})">
+                    <div class="message-avatar">${msg.avatar}</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-name">${msg.name}</span>
+                            <span class="message-time">${msg.time}</span>
+                        </div>
+                        <p class="message-preview">${msg.lastMessage}</p>
+                    </div>
+                </div>
+            `).join('');
+
+            // Show messages list, hide chat
+            listContainer.style.display = 'flex';
+            document.getElementById('chatView').style.display = 'none';
+            document.getElementById('backBtn').style.visibility = 'hidden';
+            
+            updateLanguage();
+        }
+
+        function openChat(chatId) {
+            currentChatId = chatId;
+            const messages = StorageManager.getMessages();
+            const chat = messages.find(m => m.id === chatId);
+            
+            if (!chat) return;
+
+            // Update chat header
+            document.getElementById('chatName').textContent = chat.name;
+            document.getElementById('chatAvatar').textContent = chat.avatar;
+
+            // Load chat messages
+            const messagesContainer = document.getElementById('chatMessages');
+            messagesContainer.innerHTML = chat.messages.map(msg => {
+                const isYou = msg.sender === 'You';
+                return `
+                    <div style="margin-bottom: 16px; display: flex; justify-content: ${isYou ? 'flex-end' : 'flex-start'};">
+                        <div style="max-width: 70%; background: ${isYou ? '#8E1D22' : '#f5f5f5'}; color: ${isYou ? 'white' : '#333'}; padding: 12px 16px; border-radius: ${isYou ? '16px 16px 0 16px' : '16px 16px 16px 0'};">
+                            <p style="margin: 0;">${msg.text}</p>
+                            <p style="margin: 4px 0 0; font-size: 0.75rem; opacity: 0.7;">${msg.time}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Show chat view, hide messages list
+            document.getElementById('messagesList').style.display = 'none';
+            document.getElementById('chatView').style.display = 'block';
+            document.getElementById('backBtn').style.visibility = 'visible';
+
+            updateLanguage();
+        }
+
+        function openNewChat(prefilledMessage) {
+            // For demo purposes, open chat with first contact
+            openChat(1);
+            if (prefilledMessage) {
+                document.getElementById('messageInput').value = decodeURIComponent(prefilledMessage);
+            }
+        }
+
+        function backToMessages() {
+            loadMessagesList();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const text = input.value.trim();
+            
+            if (!text || !currentChatId) return;
+
+            const message = {
+                sender: 'You',
+                text: text,
+                time: 'Just now'
+            };
+
+            // Add message to storage
+            StorageManager.addMessage(currentChatId, message);
+
+            // Clear input
+            input.value = '';
+
+            // Reload chat to show new message
+            openChat(currentChatId);
+
+            // Simulate response after 2 seconds
+            setTimeout(() => {
+                const lang = StorageManager.getCurrentLanguage();
+                const response = {
+                    sender: document.getElementById('chatName').textContent,
+                    text: lang === 'vi' ? 'Cảm ơn tin nhắn của bạn! Tôi sẽ trả lời sớm.' : 'Thanks for your message! I\'ll respond soon.',
+                    time: 'Just now'
+                };
+                StorageManager.addMessage(currentChatId, response);
+                openChat(currentChatId);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

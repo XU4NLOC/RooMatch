@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Boost Your Property</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="boost-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.history.back()">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="Boost Your Property" data-vi="Đẩy phòng của bạn">Boost Your Property</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 32px;">
+            <h1 data-en="Get More Visibility" data-vi="Tăng khả năng hiển thị">Get More Visibility</h1>
+            <p style="color: #666; margin-top: 8px;" data-en="Boost your property to reach more potential tenants" data-vi="Đẩy phòng của bạn để tiếp cận nhiều người thuê tiềm năng hơn">Boost your property to reach more potential tenants</p>
+        </div>
+
+        <div class="packages-grid">
+            <!-- Free Package -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3 class="package-name" data-en="Free" data-vi="Miễn phí">Free</h3>
+                    <div class="package-price">$0</div>
+                    <p style="color: #666; margin-top: 8px;" data-en="Basic listing" data-vi="Đăng cơ bản">Basic listing</p>
+                </div>
+                <ul class="package-features">
+                    <li data-en="Chronological order listing" data-vi="Hiển thị theo thứ tự thời gian">Chronological order listing</li>
+                    <li data-en="Standard visibility" data-vi="Hiển thị tiêu chuẩn">Standard visibility</li>
+                    <li data-en="Basic listing details" data-vi="Thông tin cơ bản">Basic listing details</li>
+                </ul>
+                <button class="btn-secondary" style="width: 100%;" onclick="selectPackage('free')" data-en="Current Plan" data-vi="Gói hiện tại">Current Plan</button>
+            </div>
+
+            <!-- 7-Day Boost -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3 class="package-name" data-en="7-Day Boost" data-vi="Đẩy 7 ngày">7-Day Boost</h3>
+                    <div class="package-price">$15</div>
+                    <p style="color: #666; margin-top: 8px;" data-en="Quick exposure" data-vi="Phơi sáng nhanh">Quick exposure</p>
+                </div>
+                <ul class="package-features">
+                    <li data-en="Priority placement for 7 days" data-vi="Ưu tiên hiển thị 7 ngày">Priority placement for 7 days</li>
+                    <li data-en="'Boosted' label badge" data-vi="Nhãn 'Đã đẩy'">quot;Boosted" label badge</li>
+                    <li data-en="Higher search ranking" data-vi="Xếp hạng cao hơn">Higher search ranking</li>
+                    <li data-en="Featured in recommendations" data-vi="Nổi bật trong đề xuất">Featured in recommendations</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%;" onclick="selectPackage('7day')" data-en="Select Plan" data-vi="Chọn gói">Select Plan</button>
+            </div>
+
+            <!-- 15-Day Boost (Featured) -->
+            <div class="package-card featured">
+                <div style="background: #F15229; color: white; padding: 8px; text-align: center; margin: -24px -24px 16px; border-radius: 16px 16px 0 0;" data-en="MOST POPULAR" data-vi="PHỔ BIẾN NHẤT">MOST POPULAR</div>
+                <div class="package-header">
+                    <h3 class="package-name" data-en="15-Day Boost" data-vi="Đẩy 15 ngày">15-Day Boost</h3>
+                    <div class="package-price">$25</div>
+                    <p style="color: #666; margin-top: 8px;" data-en="Best value" data-vi="Giá trị tốt nhất">Best value</p>
+                </div>
+                <ul class="package-features">
+                    <li data-en="Priority placement for 15 days" data-vi="Ưu tiên hiển thị 15 ngày">Priority placement for 15 days</li>
+                    <li data-en="'Boosted' label badge" data-vi="Nhãn 'Đã đẩy'">"Boosted" label badge</li>
+                    <li data-en="Highest search ranking" data-vi="Xếp hạng cao nhất">Highest search ranking</li>
+                    <li data-en="Featured prominently" data-vi="Hiển thị nổi bật">Featured prominently</li>
+                    <li data-en="Email notifications to matches" data-vi="Thông báo email">Email notifications to matches</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%; background: linear-gradient(135deg, #F15229 0%, #C40817 100%);" onclick="selectPackage('15day')" data-en="Select Plan" data-vi="Chọn gói">Select Plan</button>
+            </div>
+
+            <!-- 30-Day Boost -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3 class="package-name" data-en="30-Day Boost" data-vi="Đẩy 30 ngày">30-Day Boost</h3>
+                    <div class="package-price">$40</div>
+                    <p style="color: #666; margin-top: 8px;" data-en="Maximum exposure" data-vi="Phơi sáng tối đa">Maximum exposure</p>
+                </div>
+                <ul class="package-features">
+                    <li data-en="Priority placement for 30 days" data-vi="Ưu tiên hiển thị 30 ngày">Priority placement for 30 days</li>
+                    <li data-en="'Premium' label badge" data-vi="Nhãn 'Cao cấp'">"Premium" label badge</li>
+                    <li data-en="Top search ranking" data-vi="Xếp hạng cao nhất">Top search ranking</li>
+                    <li data-en="Featured all month" data-vi="Nổi bật cả tháng">Featured all month</li>
+                    <li data-en="Email & push notifications" data-vi="Thông báo email & push">Email & push notifications</li>
+                    <li data-en="Reduced vacancy time" data-vi="Giảm thời gian trống">Reduced vacancy time</li>
+                </ul>
+                <button class="btn-primary" style="width: 100%;" onclick="selectPackage('30day')" data-en="Select Plan" data-vi="Chọn gói">Select Plan</button>
+            </div>
+        </div>
+
+        <!-- Payment Modal (Hidden by default) -->
+        <div id="paymentModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+            <div style="background: white; border-radius: 16px; padding: 32px; max-width: 400px; width: 90%;">
+                <h2 style="color: #340307; margin-bottom: 16px;" data-en="Complete Payment" data-vi="Hoàn tất thanh toán">Complete Payment</h2>
+                <div id="packageDetails" style="background: #f5f5f5; padding: 16px; border-radius: 8px; margin-bottom: 24px;"></div>
+                
+                <div class="form-group">
+                    <label data-en="Card Number" data-vi="Số thẻ">Card Number</label>
+                    <input type="text" placeholder="1234 5678 9012 3456" style="width: 100%; padding: 12px; border: 2px solid #f5f5f5; border-radius: 8px;">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label data-en="Expiry" data-vi="Hết hạn">Expiry</label>
+                        <input type="text" placeholder="MM/YY" style="width: 100%; padding: 12px; border: 2px solid #f5f5f5; border-radius: 8px;">
+                    </div>
+                    <div class="form-group">
+                        <label>CVV</label>
+                        <input type="text" placeholder="123" style="width: 100%; padding: 12px; border: 2px solid #f5f5f5; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 24px;">
+                    <button class="btn-secondary" style="flex: 1;" onclick="closePaymentModal()" data-en="Cancel" data-vi="Hủy">Cancel</button>
+                    <button class="btn-primary" style="flex: 1;" onclick="processPayment()" data-en="Pay Now" data-vi="Thanh toán">Pay Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        let selectedPackage = null;
+
+        const packages = {
+            free: { name: 'Free', nameVi: 'Miễn phí', price: 0, days: 0 },
+            '7day': { name: '7-Day Boost', nameVi: 'Đẩy 7 ngày', price: 15, days: 7 },
+            '15day': { name: '15-Day Boost', nameVi: 'Đẩy 15 ngày', price: 25, days: 15 },
+            '30day': { name: '30-Day Boost', nameVi: 'Đẩy 30 ngày', price: 40, days: 30 }
+        };
+
+        function selectPackage(packageType) {
+            if (packageType === 'free') {
+                const lang = StorageManager.getCurrentLanguage();
+                alert(lang === 'vi' ? 'Bạn đang dùng gói miễn phí' : 'You are on the free plan');
+                return;
+            }
+
+            selectedPackage = packageType;
+            const pkg = packages[packageType];
+            const lang = StorageManager.getCurrentLanguage();
+            
+            const details = document.getElementById('packageDetails');
+            details.innerHTML = `
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <strong>${lang === 'vi' ? 'Gói' : 'Package'}:</strong>
+                    <span>${lang === 'vi' ? pkg.nameVi : pkg.name}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <strong>${lang === 'vi' ? 'Thời gian' : 'Duration'}:</strong>
+                    <span>${pkg.days} ${lang === 'vi' ? 'ngày' : 'days'}</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.25rem; color: #8E1D22;">
+                    <strong>${lang === 'vi' ? 'Tổng' : 'Total'}:</strong>
+                    <strong>$${pkg.price}</strong>
+                </div>
+            `;
+
+            document.getElementById('paymentModal').style.display = 'flex';
+        }
+
+        function closePaymentModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        function processPayment() {
+            const lang = StorageManager.getCurrentLanguage();
+            const pkg = packages[selectedPackage];
+            
+            // Simulate payment processing
+            alert(lang === 'vi' 
+                ? `Thanh toán thành công! Phòng của bạn sẽ được đẩy trong ${pkg.days} ngày.`
+                : `Payment successful! Your property will be boosted for ${pkg.days} days.`);
+            
+            closePaymentModal();
+            window.location.href = 'broker-progress.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RooMatch - Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="components.css">
+</head>
+<body class="profile-page">
+    <nav class="top-nav">
+        <button class="btn-back" onclick="window.location.href='home.html'">
+            <span>←</span>
+        </button>
+        <h2 class="page-title" data-en="Profile" data-vi="Hồ sơ">Profile</h2>
+        <div class="language-toggle">
+            <button class="lang-btn active" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="vi">VI</button>
+        </div>
+    </nav>
+
+    <div class="container" style="padding-bottom: 80px;">
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-avatar" id="profileAvatar">U</div>
+            <h2 id="userName">User Name</h2>
+            <p id="userPhone" style="color: #666; margin-top: 4px;">+84 123 456 789</p>
+            <p id="userEmail" style="color: #666;">user@example.com</p>
+            
+            <!-- Role Badge -->
+            <div id="roleBadge" style="margin-top: 16px; padding: 8px 16px; background: #dcfce7; color: #16a34a; border-radius: 20px; display: inline-block; font-weight: 600;">
+                <span data-en="Role" data-vi="Vai trò">Role</span>: <span id="userRole">Matcher</span>
+            </div>
+
+            <button class="btn-secondary" onclick="switchRole()" style="margin-top: 16px;" data-en="Switch Role" data-vi="Đổi vai trò">Switch Role</button>
+        </div>
+
+        <!-- Profile Menu -->
+        <div class="profile-menu">
+            <!-- For Seeker/Broker -->
+            <div id="seekerMenu" style="display: none;">
+                <div class="menu-item" onclick="window.location.href='broker-application.html'">
+                    <span>📋 <span data-en="Submit Property" data-vi="Đăng phòng">Submit Property</span></span>
+                    <span>→</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='broker-progress.html'">
+                    <span>📊 <span data-en="My Applications" data-vi="Đơn của tôi">My Applications</span></span>
+                    <span>→</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='boost.html'">
+                    <span>🚀 <span data-en="Boost Property" data-vi="Đẩy phòng">Boost Property</span></span>
+                    <span>→</span>
+                </div>
+            </div>
+
+            <!-- For Matcher -->
+            <div id="matcherMenu" style="display: none;">
+                <div class="menu-item" onclick="viewLikedProperties()">
+                    <span>❤️ <span data-en="Liked Properties" data-vi="Phòng đã thích">Liked Properties</span></span>
+                    <span>→</span>
+                </div>
+                <div class="menu-item" onclick="window.location.href='property-swipe.html'">
+                    <span>💫 <span data-en="Swipe Properties" data-vi="Vuốt xem phòng">Swipe Properties</span></span>
+                    <span>→</span>
+                </div>
+            </div>
+
+            <!-- Common Menu Items -->
+            <div class="menu-item" onclick="window.location.href='messages.html'">
+                <span>💬 <span data-en="Messages" data-vi="Tin nhắn">Messages</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="window.location.href='notifications.html'">
+                <span>🔔 <span data-en="Notifications" data-vi="Thông báo">Notifications</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="editProfile()">
+                <span>✏️ <span data-en="Edit Profile" data-vi="Sửa hồ sơ">Edit Profile</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="showSettings()">
+                <span>⚙️ <span data-en="Settings" data-vi="Cài đặt">Settings</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="showHelp()">
+                <span>❓ <span data-en="Help & Support" data-vi="Trợ giúp">Help & Support</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="showAbout()">
+                <span>ℹ️ <span data-en="About RooMatch" data-vi="Về RooMatch">About RooMatch</span></span>
+                <span>→</span>
+            </div>
+            <div class="menu-item" onclick="handleLogout()" style="color: #C40817;">
+                <span>🚪 <span data-en="Logout" data-vi="Đăng xuất">Logout</span></span>
+                <span>→</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="home.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+            </svg>
+            <span data-en="Home" data-vi="Trang chủ">Home</span>
+        </a>
+        <a href="property-swipe.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <span data-en="Swipe" data-vi="Vuốt">Swipe</span>
+        </a>
+        <a href="notifications.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>
+            </svg>
+            <span data-en="Notifications" data-vi="Thông báo">Notifications</span>
+        </a>
+        <a href="messages.html" class="nav-item">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+            </svg>
+            <span data-en="Messages" data-vi="Tin nhắn">Messages</span>
+        </a>
+        <a href="profile.html" class="nav-item active">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            <span data-en="Profile" data-vi="Hồ sơ">Profile</span>
+        </a>
+    </nav>
+
+    <script src="language.js"></script>
+    <script src="storage.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = StorageManager.getCurrentUser();
+            if (!user) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            loadProfile(user);
+        });
+
+        function loadProfile(user) {
+            // Set profile info
+            document.getElementById('userName').textContent = user.name || 'User';
+            document.getElementById('userPhone').textContent = user.phone || 'No phone';
+            document.getElementById('userEmail').textContent = user.email || 'No email';
+            
+            // Set avatar
+            const initials = (user.name || 'U').substring(0, 1).toUpperCase();
+            document.getElementById('profileAvatar').textContent = initials;
+
+            // Set role
+            const role = user.role || 'matcher';
+            const roleText = role === 'seeker' 
+                ? (StorageManager.getCurrentLanguage() === 'vi' ? 'Người cho thuê' : 'Seeker')
+                : (StorageManager.getCurrentLanguage() === 'vi' ? 'Người tìm trọ' : 'Matcher');
+            document.getElementById('userRole').textContent = roleText;
+
+            // Show appropriate menu
+            if (role === 'seeker') {
+                document.getElementById('seekerMenu').style.display = 'block';
+                document.getElementById('matcherMenu').style.display = 'none';
+            } else {
+                document.getElementById('seekerMenu').style.display = 'none';
+                document.getElementById('matcherMenu').style.display = 'block';
+            }
+
+            updateLanguage();
+        }
+
+        function switchRole() {
+            const lang = StorageManager.getCurrentLanguage();
+            if (confirm(lang === 'vi' ? 'Bạn có muốn đổi vai trò?' : 'Do you want to switch role?')) {
+                window.location.href = 'role-selection.html';
+            }
+        }
+
+        function viewLikedProperties() {
+            const liked = StorageManager.getLikedProperties();
+            const lang = StorageManager.getCurrentLanguage();
+            
+            if (liked.length === 0) {
+                alert(lang === 'vi' ? 'Bạn chưa thích phòng nào' : 'You haven\'t liked any properties yet');
+                return;
+            }
+            
+            // In a real app, this would navigate to a liked properties page
+            alert(lang === 'vi' 
+                ? `Bạn đã thích ${liked.length} phòng`
+                : `You have liked ${liked.length} properties`);
+        }
+
+        function editProfile() {
+            const lang = StorageManager.getCurrentLanguage();
+            alert(lang === 'vi' ? 'Tính năng sửa hồ sơ (Demo)' : 'Edit profile feature (Demo)');
+        }
+
+        function showSettings() {
+            const lang = StorageManager.getCurrentLanguage();
+            alert(lang === 'vi' ? 'Tính năng cài đặt (Demo)' : 'Settings feature (Demo)');
+        }
+
+        function showHelp() {
+            const lang = StorageManager.getCurrentLanguage();
+            const helpText = lang === 'vi'
+                ? 'Liên hệ hỗ trợ:\nEmail: support@roomatch.com\nPhone: +84 123 456 789'
+                : 'Contact Support:\nEmail: support@roomatch.com\nPhone: +84 123 456 789';
+            alert(helpText);
+        }
+
+        function showAbout() {
+            const lang = StorageManager.getCurrentLanguage();
+            const aboutText = lang === 'vi'
+                ? 'RooMatch - Kết nối sinh viên RMIT với nhau\n\nPhiên bản: 1.0.0\n\nRooMatch giúp sinh viên RMIT tìm phòng và bạn cùng phòng trong cộng đồng an toàn và quen thuộc.'
+                : 'RooMatch - Connecting RMIT Students\n\nVersion: 1.0.0\n\nRooMatch helps RMIT students find rooms and roommates within a safe and familiar community.';
+            alert(aboutText);
+        }
+
+        function handleLogout() {
+            const lang = StorageManager.getCurrentLanguage();
+            if (confirm(lang === 'vi' ? 'Bạn có chắc muốn đăng xuất?' : 'Are you sure you want to logout?')) {
+                StorageManager.clearUser();
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
